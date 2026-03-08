@@ -1,0 +1,56 @@
+.footer {
+  border-top: 1px solid var(--border-color);
+  padding: 40px 0;
+  margin-top: 80px;
+  text-align: center;
+}
+
+.footer__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer__icon {
+  color: var(--accent-gold);
+  font-size: 1.5rem;
+}
+
+.footer__title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.footer__subtitle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.footer__copy {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer__heart {
+  color: var(--accent-rose);
+  font-size: 0.85rem;
+}
+
+.footer__year {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}

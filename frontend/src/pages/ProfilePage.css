@@ -1,0 +1,239 @@
+.profile {
+  padding-top: calc(var(--nav-height) + 32px);
+  padding-bottom: 80px;
+  min-height: 100vh;
+}
+
+.profile__header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.profile__avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile__avatar span {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.profile__info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.profile__name {
+  font-size: 1.5rem;
+  font-family: var(--font-body);
+  display: inline;
+  margin-right: 12px;
+}
+
+.profile__email {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.profile__current-tarot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+}
+
+.profile__edit-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.profile__edit-input {
+  padding: 8px 16px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+}
+
+.profile__edit-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.profile__actions-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: flex-start;
+}
+
+.profile__logout-btn:hover {
+  color: #f43f5e !important;
+}
+
+/* Tabs */
+.profile__tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.profile__tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+
+.profile__tab:hover {
+  color: var(--text-primary);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.profile__tab--active {
+  color: var(--text-primary);
+  background: rgba(139, 92, 246, 0.12);
+}
+
+/* Content */
+.profile__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile__reading {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.profile__reading:hover {
+  transform: translateX(4px);
+}
+
+.profile__reading-img {
+  width: 56px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.profile__reading-info {
+  min-width: 0;
+}
+
+.profile__reading-info h3 {
+  font-size: 1rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.profile__reading-info p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+.profile__reading-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.profile__empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile__empty svg {
+  font-size: 2rem;
+  color: var(--accent-primary);
+  opacity: 0.5;
+}
+
+/* Social */
+.profile__social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.profile__social-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px;
+}
+
+.profile__social-icon {
+  font-size: 2rem;
+  color: var(--accent-primary);
+}
+
+.profile__social-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .profile__header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile__actions-right {
+    flex-direction: row;
+    align-self: center;
+  }
+
+  .profile__tabs {
+    overflow-x: auto;
+  }
+}

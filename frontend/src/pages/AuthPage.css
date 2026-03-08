@@ -1,0 +1,123 @@
+.auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  padding-top: calc(var(--nav-height) + 24px);
+}
+
+.auth__card {
+  width: 100%;
+  max-width: 440px;
+  padding: 40px;
+}
+
+.auth__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth__icon {
+  font-size: 2.5rem;
+  color: var(--accent-gold);
+  margin-bottom: 16px;
+}
+
+.auth__header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.auth__header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth__error {
+  padding: 12px 16px;
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  border-radius: var(--radius-sm);
+  color: #f87171;
+  font-size: 0.85rem;
+}
+
+.auth__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth__field-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  z-index: 1;
+}
+
+.auth__field input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.auth__field input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.auth__toggle-pass {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  z-index: 1;
+}
+
+.auth__toggle-pass:hover {
+  color: var(--text-secondary);
+}
+
+.auth__submit {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.auth__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.auth__switch {
+  text-align: center;
+  margin-top: 24px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.auth__switch a {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.auth__switch a:hover {
+  text-decoration: underline;
+}
