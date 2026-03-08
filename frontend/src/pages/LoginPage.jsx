@@ -30,7 +30,7 @@ export default function LoginPage() {
 
   return (
     <div className="auth">
-      <div className="auth__card card animate-fade-in-up">
+      <div className="auth__card card">
         <div className="auth__header">
           <GiCrystalBall className="auth__icon" />
           <h1>Welcome Back</h1>

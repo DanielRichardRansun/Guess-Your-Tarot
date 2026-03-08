@@ -173,18 +173,18 @@ export default function HomePage() {
           <div className="hero__orb hero__orb--3"></div>
         </div>
         <div className="hero__container container">
-          <div className="hero__badge animate-fade-in-up">
+          <div className="hero__badge">
             <GiCardRandom /> AI-Powered Tarot Reading
           </div>
-          <h1 className="hero__title animate-fade-in-up delay-1">
+          <h1 className="hero__title">
             What Tarot Are You <span className="text-gradient">Today?</span>
           </h1>
-          <p className="hero__subtitle animate-fade-in-up delay-2">
+          <p className="hero__subtitle">
             Tell us how you feel today and let AI reveal your tarot card. Your
             thoughts hold the key to your cosmic destiny.
           </p>
 
-          <div className="hero__input-wrapper animate-fade-in-up delay-3">
+          <div className="hero__input-wrapper">
             <textarea
               className="hero__input"
               placeholder="Tell me what's on your mind today... How are you feeling? What happened recently? What are you hoping for?"
@@ -228,7 +228,7 @@ export default function HomePage() {
       {/* Social Media Section */}
       <section className="social section">
         <div className="container">
-          <div className="social__header animate-fade-in-up">
+          <div className="social__header">
             <FiZap className="social__header-icon" />
             <h2 className="social__title">Guess My Tarot from Social Media</h2>
             <p className="social__desc">
@@ -241,7 +241,7 @@ export default function HomePage() {
             {socialPlatforms.map((platform, i) => (
               <div
                 key={platform.key}
-                className="social__card card animate-fade-in-up"
+                className="social__card card"
                 style={{ animationDelay: `${(i + 1) * 0.1}s` }}
               >
                 <div

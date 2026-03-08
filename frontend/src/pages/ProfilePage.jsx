@@ -114,7 +114,7 @@ export default function ProfilePage() {
     <div className="profile">
       <div className="container container--narrow">
         {/* Profile Header */}
-        <div className="profile__header card animate-fade-in-up">
+        <div className="profile__header card">
           <div className="profile__avatar">
             <span>{user.name?.charAt(0).toUpperCase()}</span>
           </div>
@@ -178,7 +178,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Tabs */}
-        <div className="profile__tabs animate-fade-in-up delay-1">
+        <div className="profile__tabs">
           {tabs.map((t) => (
             <button
               key={t.key}
@@ -191,7 +191,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Tab Content */}
-        <div className="profile__content animate-fade-in-up delay-2">
+        <div className="profile__content">
           {tab === "history" && (
             <div className="profile__list">
               {history.length === 0 ? (

@@ -76,7 +76,7 @@ export default function Navbar() {
                 </span>
               </button>
               {profileOpen && (
-                <div className="navbar__dropdown animate-fade-in">
+                <div className="navbar__dropdown">
                   <div className="navbar__dropdown-header">
                     <strong>{user.name}</strong>
                     <span>{user.email}</span>

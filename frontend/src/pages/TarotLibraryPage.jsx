@@ -44,13 +44,13 @@ export default function TarotLibraryPage() {
   return (
     <div className="library">
       <div className="container">
-        <div className="library__header animate-fade-in-up">
+        <div className="library__header">
           <GiCardRandom className="library__header-icon" />
           <h1>Tarot Library</h1>
           <p>Explore all 78 tarot cards and their mystical meanings</p>
         </div>
 
-        <div className="library__filters animate-fade-in-up delay-1">
+        <div className="library__filters">
           <div className="library__search">
             <FiSearch className="library__search-icon" />
             <input
@@ -91,7 +91,7 @@ export default function TarotLibraryPage() {
               {filteredTarots.map((tarot, i) => (
                 <div
                   key={tarot.id}
-                  className="library__card card animate-fade-in-up"
+                  className="library__card card"
                   style={{ animationDelay: `${Math.min(i * 0.05, 0.5)}s` }}
                   onClick={() => setSelectedTarot(tarot)}
                 >
@@ -118,7 +118,7 @@ export default function TarotLibraryPage() {
             onClick={() => setSelectedTarot(null)}
           >
             <div
-              className="library__modal-content card animate-fade-in-up"
+              className="library__modal-content card"
               onClick={(e) => e.stopPropagation()}
             >
               <button

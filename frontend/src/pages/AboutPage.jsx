@@ -6,14 +6,14 @@ export default function AboutPage() {
   return (
     <div className="about">
       <div className="container container--narrow">
-        <div className="about__header animate-fade-in-up">
+        <div className="about__header">
           <GiCrystalBall className="about__header-icon" />
           <h1>About Guess Your Tarot</h1>
           <p className="about__header-subtitle">by Ransite</p>
         </div>
 
         <div className="about__cards">
-          <div className="about__card card animate-fade-in-up delay-1">
+          <div className="about__card card">
             <div className="about__card-icon">
               <GiCrystalBall />
             </div>
@@ -33,7 +33,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="about__card card animate-fade-in-up delay-2">
+          <div className="about__card card">
             <div className="about__card-icon about__card-icon--blue">
               <FiDatabase />
             </div>
@@ -53,7 +53,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="about__card card animate-fade-in-up delay-3">
+          <div className="about__card card">
             <div className="about__card-icon about__card-icon--gold">
               <FiSmile />
             </div>

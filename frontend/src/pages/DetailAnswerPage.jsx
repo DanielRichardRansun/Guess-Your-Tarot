@@ -166,7 +166,7 @@ export default function DetailAnswerPage() {
     <div className="detail">
       <div className="container container--narrow">
         {/* Share Bar Top */}
-        <div className="detail__share-bar animate-fade-in-up">
+        <div className="detail__share-bar">
           <div className="detail__share-socials">
             <a
               href={shareLinks.twitter}
@@ -228,7 +228,7 @@ export default function DetailAnswerPage() {
         </div>
 
         {/* Date & Input */}
-        <div className="detail__meta animate-fade-in-up delay-1">
+        <div className="detail__meta">
           <span className="detail__date">
             <FiCalendar /> {formatDate(reading.created_at)}
           </span>
@@ -268,7 +268,7 @@ export default function DetailAnswerPage() {
         </div>
 
         {/* Main Tarot Card */}
-        <div className="detail__hero animate-fade-in-up delay-2">
+        <div className="detail__hero">
           <h1 className="detail__tarot-title">{reading.main_tarot_name}</h1>
           <div
             className={`detail__card-wrapper ${cardFlipped ? "detail__card-wrapper--flipped" : ""}`}
@@ -289,14 +289,14 @@ export default function DetailAnswerPage() {
         </div>
 
         {/* Short Explanation */}
-        <div className="detail__highlight animate-fade-in-up delay-3">
+        <div className="detail__highlight">
           <div className="detail__highlight-inner">
             <p>{reading.short_explanation}</p>
           </div>
         </div>
 
         {/* Long Explanation */}
-        <div className="detail__explanation animate-fade-in-up delay-4">
+        <div className="detail__explanation">
           <div className="detail__explanation-content">
             {renderLongExplanation(reading.long_explanation)}
           </div>
@@ -304,7 +304,7 @@ export default function DetailAnswerPage() {
 
         {/* Supporting Tarots */}
         {reading.support_tarots && reading.support_tarots.length > 0 && (
-          <div className="detail__related animate-fade-in-up delay-5">
+          <div className="detail__related">
             <h2 className="detail__related-title">
               <span className="detail__related-icon">🌟</span> Tarots That
               Support You
@@ -327,7 +327,7 @@ export default function DetailAnswerPage() {
 
         {/* Challenge Tarots */}
         {reading.challenge_tarots && reading.challenge_tarots.length > 0 && (
-          <div className="detail__related animate-fade-in-up">
+          <div className="detail__related">
             <h2 className="detail__related-title">
               <span className="detail__related-icon">⚡</span> Tarots That
               Challenge You
@@ -349,7 +349,7 @@ export default function DetailAnswerPage() {
         )}
 
         {/* Share Bar Bottom */}
-        <div className="detail__share-bar detail__share-bar--bottom animate-fade-in-up">
+        <div className="detail__share-bar detail__share-bar--bottom">
           <p className="detail__share-label">Share your reading ✨</p>
           <div className="detail__share-socials">
             <a
