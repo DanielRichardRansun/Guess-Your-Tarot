@@ -21,20 +21,20 @@ class TarotReadingController extends Controller
         ]);
 
         // Guest rate limiting
-        if (!Auth::check()) {
-            $ip = $request->ip();
-            $todayCount = TarotReading::where('guest_ip', $ip)
-                ->whereNull('user_id')
-                ->whereDate('created_at', today())
-                ->count();
+        // if (!Auth::check()) {
+        //     $ip = $request->ip();
+        //     $todayCount = TarotReading::where('guest_ip', $ip)
+        //         ->whereNull('user_id')
+        //         ->whereDate('created_at', today())
+        //         ->count();
 
-            if ($todayCount >= 2) {
-                return response()->json([
-                    'message' => 'You\'ve reached your daily limit! Login or create an account to get unlimited tarot readings.',
-                    'limit_reached' => true,
-                ], 429);
-            }
-        }
+        //     if ($todayCount >= 2) {
+        //         return response()->json([
+        //             'message' => 'You\'ve reached your daily limit! Login or create an account to get unlimited tarot readings.',
+        //             'limit_reached' => true,
+        //         ], 429);
+        //     }
+        // }
 
         $source = $request->input('source', 'text');
         $inputText = $request->input('input_text', '');
