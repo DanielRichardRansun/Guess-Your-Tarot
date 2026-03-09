@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import { FiSend, FiStar, FiZap } from "react-icons/fi";
 import { GiCrystalBall, GiCardRandom } from "react-icons/gi";
+import { useTranslation } from "react-i18next";
 import CardShuffle from "../components/CardShuffle";
 import api from "../api";
 import "./HomePage.css";
@@ -67,6 +68,7 @@ export default function HomePage() {
   const [limitReached, setLimitReached] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const handleReveal = async () => {
     if (!inputText.trim()) return;
@@ -163,7 +165,7 @@ export default function HomePage() {
 
   return (
     <div className="home">
-      {loading && <CardShuffle message="Shuffling the cosmic deck..." />}
+      {loading && <CardShuffle message={t("home.shuffling")} />}
 
       {/* Hero Section */}
       <section className="hero">
@@ -177,17 +179,15 @@ export default function HomePage() {
             <GiCardRandom /> AI-Powered Tarot Reading
           </div>
           <h1 className="hero__title">
-            What Tarot Are You <span className="text-gradient">Today?</span>
+            {t("home.title")}{" "}
+            <span className="text-gradient">{t("home.title_highlight")}</span>
           </h1>
-          <p className="hero__subtitle">
-            Tell us how you feel today and let AI reveal your tarot card. Your
-            thoughts hold the key to your cosmic destiny.
-          </p>
+          <p className="hero__subtitle">{t("home.subtitle")}</p>
 
           <div className="hero__input-wrapper">
             <textarea
               className="hero__input"
-              placeholder="Tell me what's on your mind today... How are you feeling? What happened recently? What are you hoping for?"
+              placeholder={t("home.placeholder")}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -201,7 +201,7 @@ export default function HomePage() {
                 onClick={handleReveal}
                 disabled={!inputText.trim() || loading}
               >
-                <FiStar /> Reveal My Tarot
+                <FiStar /> {t("home.reveal_btn")}
               </button>
             </div>
           </div>

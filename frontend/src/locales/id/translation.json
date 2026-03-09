@@ -1,0 +1,21 @@
+{
+  "navbar": {
+    "home": "Beranda",
+    "reading": "Baca Tarot",
+    "library": "Pustaka",
+    "profile": "Profil",
+    "about": "Tentang",
+    "login": "Masuk",
+    "signup": "Daftar",
+    "logout": "Keluar",
+    "my_team": "Tim Saya"
+  },
+  "home": {
+    "title": "Apa Tarot Anda",
+    "title_highlight": "Hari Ini?",
+    "subtitle": "Katakan pada kami bagaimana perasaan Anda hari ini dan biarkan AI mengungkapkan kartu tarot Anda. Pikiran Anda memegang kunci takdir kosmik Anda.",
+    "placeholder": "Katakan apa yang ada di pikiran Anda hari ini... Bagaimana perasaan Anda? Apa yang baru saja terjadi? Apa yang Anda harapkan?",
+    "reveal_btn": "Ungkap Tarot Saya",
+    "shuffling": "Mengocok dek kosmik..."
+  }
+}

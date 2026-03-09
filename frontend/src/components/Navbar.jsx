@@ -4,19 +4,22 @@ import { useTheme } from "../contexts/ThemeContext";
 import { useAuth } from "../contexts/AuthContext";
 import { FiSun, FiMoon, FiMenu, FiX, FiUser, FiLogOut } from "react-icons/fi";
 import { GiCrystalBall } from "react-icons/gi";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
 import "./Navbar.css";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
   const navLinks = [
-    { path: "/", label: "Home" },
-    { path: "/library", label: "Tarot Library" },
-    { path: "/about", label: "About" },
+    { path: "/", label: t("navbar.home") },
+    { path: "/library", label: t("navbar.library") },
+    { path: "/about", label: t("navbar.about") },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -48,12 +51,14 @@ export default function Navbar() {
               className={`navbar__link navbar__link--mobile-only ${isActive("/profile") ? "navbar__link--active" : ""}`}
               onClick={() => setMobileOpen(false)}
             >
-              Profile
+              {t("navbar.profile")}
             </Link>
           )}
         </div>
 
         <div className="navbar__actions">
+          <LanguageSwitcher />
+
           <button
             className="btn btn--icon btn--ghost navbar__theme-btn"
             onClick={toggleTheme}
@@ -86,7 +91,7 @@ export default function Navbar() {
                     className="navbar__dropdown-item"
                     onClick={() => setProfileOpen(false)}
                   >
-                    <FiUser /> Profile
+                    <FiUser /> {t("navbar.profile")}
                   </Link>
                   <button
                     className="navbar__dropdown-item navbar__dropdown-item--danger"
@@ -95,14 +100,14 @@ export default function Navbar() {
                       setProfileOpen(false);
                     }}
                   >
-                    <FiLogOut /> Logout
+                    <FiLogOut /> {t("navbar.logout")}
                   </button>
                 </div>
               )}
             </div>
           ) : (
             <Link to="/login" className="btn btn--primary btn--sm">
-              Sign In
+              {t("navbar.login")}
             </Link>
           )}
 

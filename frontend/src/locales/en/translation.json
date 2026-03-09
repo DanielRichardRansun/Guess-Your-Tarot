@@ -1,0 +1,21 @@
+{
+  "navbar": {
+    "home": "Home",
+    "reading": "Reading",
+    "library": "Tarot Library",
+    "profile": "Profile",
+    "about": "About",
+    "login": "Sign In",
+    "signup": "Sign Up",
+    "logout": "Logout",
+    "my_team": "My Team"
+  },
+  "home": {
+    "title": "What Tarot Are You",
+    "title_highlight": "Today?",
+    "subtitle": "Tell us how you feel today and let AI reveal your tarot card. Your thoughts hold the key to your cosmic destiny.",
+    "placeholder": "Tell me what's on your mind today... How are you feeling? What happened recently? What are you hoping for?",
+    "reveal_btn": "Reveal My Tarot",
+    "shuffling": "Shuffling the cosmic deck..."
+  }
+}
