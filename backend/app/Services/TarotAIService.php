@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Log;
 class TarotAIService
 {
     private string $apiKey;
-    private string $apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+    private array $modelNames = ['gemini-3-flash-preview', 'gemini-2.5-flash'];
 
     public function __construct()
     {
         $this->apiKey = config('services.gemini.api_key');
     }
 
-    public function generateReading(string $userInput, string $source = 'text', ?array $sourceData = null): array
+    public function generateReading(string $userInput, string $source = 'text', ?array $sourceData = null, string $language = 'EN'): array
     {
         $tarots = Tarot::all();
         $tarotList = $tarots->map(fn($t) => "#{$t->number} {$t->name}")->implode(', ');
@@ -26,11 +26,10 @@ class TarotAIService
             $contextInfo = "\n\nThe user connected their {$source} account. Here is their recent activity data:\n" . json_encode($sourceData, JSON_PRETTY_PRINT);
         }
 
-        $prompt = <<<PROMPT
-You are a mystical and wise tarot reader AI. Based on the user's message below, choose the most fitting tarot card for them today and provide a detailed reading.
+        $langName = ($language === 'ID') ? 'Indonesian' : 'English';
+        $systemInstruction = <<<PROMPT
+You are a mystical and wise tarot reader AI. Based on the user's message, choose the most fitting tarot card for them today and provide a detailed reading.
 {$contextInfo}
-
-User's message: "{$userInput}"
 
 Available tarot cards (use these exact numbers): {$tarotList}
 
@@ -45,6 +44,7 @@ You MUST respond in the following JSON format (no markdown, no code blocks, just
     "challenge_reasons": ["<reason for challenge card 1>", "<reason for challenge card 2>", "<reason for challenge card 3>"]
 }
 
+The user's current language preference is: {$langName}. Respond in this language.
 Important rules:
 - All tarot numbers must be from 1 to 78
 - support_tarots and challenge_tarots must each contain exactly 3 different numbers
@@ -53,93 +53,113 @@ Important rules:
 - Be mystical and enchanting in tone, but also practical and encouraging
 PROMPT;
 
-        try {
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-            ])->post("{$this->apiUrl}?key={$this->apiKey}", [
-                'contents' => [
-                    [
-                        'parts' => [
-                            ['text' => $prompt]
+        $lastError = null;
+
+        foreach ($this->modelNames as $modelName) {
+            try {
+                Log::info("Attempting tarot generation with model: {$modelName}");
+                
+                $response = Http::timeout(60)
+                    ->withHeaders([
+                        'Content-Type' => 'application/json',
+                    ])->post("https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent?key={$this->apiKey}", [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                ['text' => $userInput]
+                            ]
                         ]
-                    ]
-                ],
-                'generationConfig' => [
-                    'temperature' => 0.9,
-                    'topP' => 0.95,
-                    'topK' => 40,
-                    'maxOutputTokens' => 2048,
-                    'responseMimeType' => 'application/json',
-                ],
-            ]);
-
-            if (!$response->successful()) {
-                Log::error('Gemini API Error', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
+                    ],
+                    'system_instruction' => [
+                        'parts' => [
+                            ['text' => $systemInstruction]
+                        ]
+                    ],
+                    'generationConfig' => [
+                        'temperature' => 0.8,
+                        'topP' => 0.95,
+                        'topK' => 40,
+                        'maxOutputTokens' => 2048,
+                        'responseMimeType' => 'application/json',
+                    ],
                 ]);
-                throw new \Exception('Failed to get AI response. Status: ' . $response->status());
-            }
 
-            $data = $response->json();
-            $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                if (!$response->successful()) {
+                    $errorData = $response->json();
+                    $errorMessage = $errorData['error']['message'] ?? 'Unknown API error';
+                    Log::warning("Gemini model {$modelName} failed", ['error' => $errorMessage]);
+                    $lastError = new \Exception("Model {$modelName} failed: {$errorMessage}");
+                    continue;
+                }
 
-            if (!$text) {
-                throw new \Exception('Empty response from Gemini API');
-            }
+                $data = $response->json();
+                $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
 
-            // Parse the JSON response
-            $reading = json_decode($text, true);
+                if (!$text) {
+                    Log::warning("Gemini model {$modelName} returned empty text");
+                    continue;
+                }
 
-            if (!$reading || !isset($reading['main_tarot_number'])) {
-                Log::error('Invalid Gemini response format', ['text' => $text]);
-                throw new \Exception('Invalid AI response format');
-            }
+                // Parse the JSON response
+                $reading = json_decode($text, true);
 
-            // Resolve tarot details
-            $mainTarot = $tarots->firstWhere('number', $reading['main_tarot_number']);
-            if (!$mainTarot) {
-                $mainTarot = $tarots->random();
-            }
+                if (!$reading || !isset($reading['main_tarot_number'])) {
+                    Log::error('Invalid Gemini response format', ['text' => $text]);
+                    throw new \Exception('Invalid AI response format');
+                }
 
-            $supportTarots = collect($reading['support_tarots'])->map(function ($number, $index) use ($tarots, $reading) {
-                $tarot = $tarots->firstWhere('number', $number);
-                if (!$tarot) $tarot = $tarots->random();
+                // Resolve tarot details
+                $mainTarot = $tarots->firstWhere('number', $reading['main_tarot_number']);
+                if (!$mainTarot) {
+                    $mainTarot = $tarots->random();
+                }
+
+                $supportTarots = collect($reading['support_tarots'])->map(function ($number, $index) use ($tarots, $reading) {
+                    $tarot = $tarots->firstWhere('number', $number);
+                    if (!$tarot) $tarot = $tarots->random();
+                    return [
+                        'id' => $tarot->id,
+                        'number' => $tarot->number,
+                        'name' => $tarot->name,
+                        'image' => $tarot->image,
+                        'reason' => $reading['support_reasons'][$index] ?? 'This card supports your journey.',
+                    ];
+                })->toArray();
+
+                $challengeTarots = collect($reading['challenge_tarots'])->map(function ($number, $index) use ($tarots, $reading) {
+                    $tarot = $tarots->firstWhere('number', $number);
+                    if (!$tarot) $tarot = $tarots->random();
+                    return [
+                        'id' => $tarot->id,
+                        'number' => $tarot->number,
+                        'name' => $tarot->name,
+                        'image' => $tarot->image,
+                        'reason' => $reading['challenge_reasons'][$index] ?? 'Be mindful of this energy.',
+                    ];
+                })->toArray();
+
+                Log::info("Success with model: {$modelName}");
+
                 return [
-                    'id' => $tarot->id,
-                    'number' => $tarot->number,
-                    'name' => $tarot->name,
-                    'image' => $tarot->image,
-                    'reason' => $reading['support_reasons'][$index] ?? 'This card supports your journey.',
+                    'main_tarot_id' => $mainTarot->id,
+                    'main_tarot_name' => $mainTarot->name,
+                    'short_explanation' => $reading['short_explanation'],
+                    'long_explanation' => $reading['long_explanation'],
+                    'support_tarots' => $supportTarots,
+                    'challenge_tarots' => $challengeTarots,
                 ];
-            })->toArray();
 
-            $challengeTarots = collect($reading['challenge_tarots'])->map(function ($number, $index) use ($tarots, $reading) {
-                $tarot = $tarots->firstWhere('number', $number);
-                if (!$tarot) $tarot = $tarots->random();
-                return [
-                    'id' => $tarot->id,
-                    'number' => $tarot->number,
-                    'name' => $tarot->name,
-                    'image' => $tarot->image,
-                    'reason' => $reading['challenge_reasons'][$index] ?? 'Be mindful of this energy.',
-                ];
-            })->toArray();
-
-            return [
-                'main_tarot_id' => $mainTarot->id,
-                'main_tarot_name' => $mainTarot->name,
-                'short_explanation' => $reading['short_explanation'],
-                'long_explanation' => $reading['long_explanation'],
-                'support_tarots' => $supportTarots,
-                'challenge_tarots' => $challengeTarots,
-            ];
-        } catch (\Exception $e) {
-            Log::error('Tarot AI Service Error', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-            throw $e;
+            } catch (\Exception $e) {
+                $lastError = $e;
+                Log::error("Error with model {$modelName}: " . $e->getMessage());
+                continue;
+            }
         }
+
+        // If all models failed
+        Log::error('All Gemini models failed to respond', [
+            'last_error' => $lastError ? $lastError->getMessage() : 'Unknown error'
+        ]);
+        throw $lastError ?: new \Exception('Failed to get response from AI');
     }
 }

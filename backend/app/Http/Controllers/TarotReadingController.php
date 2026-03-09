@@ -18,6 +18,7 @@ class TarotReadingController extends Controller
             'input_text' => 'required_without:source_data|string|max:2000',
             'source' => 'sometimes|string|in:text,spotify,steam,github,strava,youtube,discord',
             'source_data' => 'sometimes|array',
+            'language' => 'sometimes|string|in:EN,ID',
         ]);
 
         // Guest rate limiting
@@ -39,6 +40,7 @@ class TarotReadingController extends Controller
         $source = $request->input('source', 'text');
         $inputText = $request->input('input_text', '');
         $sourceData = $request->input('source_data');
+        $language = $request->input('language', 'EN');
 
         // If source is social media, create a summary for the AI
         if ($source !== 'text' && $sourceData) {
@@ -46,7 +48,7 @@ class TarotReadingController extends Controller
         }
 
         try {
-            $aiResult = $aiService->generateReading($inputText, $source, $sourceData);
+            $aiResult = $aiService->generateReading($inputText, $source, $sourceData, $language);
 
             $reading = TarotReading::create([
                 'user_id' => Auth::id(),

@@ -68,7 +68,7 @@ export default function HomePage() {
   const [limitReached, setLimitReached] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleReveal = async () => {
     if (!inputText.trim()) return;
@@ -80,6 +80,7 @@ export default function HomePage() {
       const res = await api.post("/readings", {
         input_text: inputText,
         source: "text",
+        language: i18n.language?.toUpperCase().startsWith("ID") ? "ID" : "EN",
       });
       navigate(`/reading/${res.data.reading.share_slug}`);
     } catch (err) {
@@ -139,6 +140,7 @@ export default function HomePage() {
         input_text: `Based on my ${platform} activity, what tarot represents me today?`,
         source: platform,
         source_data: mockData[platform],
+        language: i18n.language?.toUpperCase().startsWith("ID") ? "ID" : "EN",
       });
       navigate(`/reading/${res.data.reading.share_slug}`);
     } catch (err) {
