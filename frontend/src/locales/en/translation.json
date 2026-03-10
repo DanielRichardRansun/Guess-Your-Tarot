@@ -50,7 +50,31 @@
     "wands": "Wands",
     "cups": "Cups",
     "swords": "Swords",
-    "pentacles": "Pentacles"
+    "pentacles": "Pentacles",
+    "keywords_label": "Keywords",
+    "close": "Close"
+  },
+  "auth": {
+    "login_title": "Welcome Back",
+    "login_subtitle": "Sign in to access your tarot history and favorites",
+    "email_placeholder": "Email address",
+    "password_placeholder": "Password",
+    "password_confirm_placeholder": "Confirm password",
+    "password_min": "Password (min 8 characters)",
+    "name_placeholder": "Full name",
+    "login_btn": "Sign In",
+    "login_loading": "Signing in...",
+    "register_title": "Join the Journey",
+    "register_subtitle": "Create an account to save your readings and unlock all features",
+    "register_btn": "Create Account",
+    "register_loading": "Creating account...",
+    "no_account": "Don't have an account?",
+    "create_one": "Create one",
+    "have_account": "Already have an account?",
+    "sign_in": "Sign in",
+    "password_mismatch": "Passwords do not match",
+    "invalid_credentials": "Invalid credentials",
+    "register_failed": "Registration failed"
   },
   "profile": {
     "edit": "Edit",

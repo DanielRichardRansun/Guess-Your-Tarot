@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { GiCrystalBall } from "react-icons/gi";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 import "./AuthPage.css";
 
 export default function LoginPage() {
@@ -13,6 +14,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +24,7 @@ export default function LoginPage() {
       await login(email, password);
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid credentials");
+      setError(err.response?.data?.message || t("auth.invalid_credentials"));
     } finally {
       setLoading(false);
     }
@@ -33,8 +35,8 @@ export default function LoginPage() {
       <div className="auth__card card">
         <div className="auth__header">
           <GiCrystalBall className="auth__icon" />
-          <h1>Welcome Back</h1>
-          <p>Sign in to access your tarot history and favorites</p>
+          <h1>{t("auth.login_title")}</h1>
+          <p>{t("auth.login_subtitle")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth__form">
@@ -44,7 +46,7 @@ export default function LoginPage() {
             <FiMail className="auth__field-icon" />
             <input
               type="email"
-              placeholder="Email address"
+              placeholder={t("auth.email_placeholder")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -55,7 +57,7 @@ export default function LoginPage() {
             <FiLock className="auth__field-icon" />
             <input
               type={showPass ? "text" : "password"}
-              placeholder="Password"
+              placeholder={t("auth.password_placeholder")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -74,12 +76,13 @@ export default function LoginPage() {
             className="btn btn--primary btn--lg auth__submit"
             disabled={loading}
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? t("auth.login_loading") : t("auth.login_btn")}
           </button>
         </form>
 
         <p className="auth__switch">
-          Don't have an account? <Link to="/register">Create one</Link>
+          {t("auth.no_account")}{" "}
+          <Link to="/register">{t("auth.create_one")}</Link>
         </p>
       </div>
     </div>

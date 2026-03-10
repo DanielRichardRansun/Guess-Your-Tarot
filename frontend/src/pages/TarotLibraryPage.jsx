@@ -139,7 +139,10 @@ export default function TarotLibraryPage() {
                 />
                 <div className="library__modal-info">
                   <span className="library__modal-num">
-                    #{selectedTarot.number} • {selectedTarot.category}
+                    #{selectedTarot.number} •{" "}
+                    {selectedTarot.category === "major"
+                      ? t("library.major")
+                      : t(`library.${selectedTarot.category}`)}
                   </span>
                   <h2>{selectedTarot.name}</h2>
                   {selectedTarot.keywords && (

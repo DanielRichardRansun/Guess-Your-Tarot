@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
 import { useAuth } from "../contexts/AuthContext";
@@ -15,6 +15,28 @@ export default function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    if (profileOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [profileOpen]);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+    setProfileOpen(false);
+  }, [location.pathname]);
 
   const navLinks = [
     { path: "/", label: t("navbar.home") },
@@ -51,9 +73,42 @@ export default function Navbar() {
               className={`navbar__link navbar__link--mobile-only ${isActive("/profile") ? "navbar__link--active" : ""}`}
               onClick={() => setMobileOpen(false)}
             >
+              <FiUser style={{ marginRight: 8 }} />
               {t("navbar.profile")}
             </Link>
           )}
+
+          {/* Mobile-only auth section */}
+          <div className="navbar__mobile-auth">
+            {user ? (
+              <button
+                className="btn btn--outline btn--sm"
+                onClick={() => {
+                  logout();
+                  setMobileOpen(false);
+                }}
+              >
+                <FiLogOut /> {t("navbar.logout")}
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="btn btn--primary btn--sm"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {t("navbar.login")}
+                </Link>
+                <Link
+                  to="/register"
+                  className="btn btn--outline btn--sm"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {t("navbar.signup")}
+                </Link>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="navbar__actions">
@@ -68,10 +123,7 @@ export default function Navbar() {
           </button>
 
           {user ? (
-            <div
-              className="navbar__profile"
-              onMouseLeave={() => setProfileOpen(false)}
-            >
+            <div className="navbar__profile" ref={profileRef}>
               <button
                 className="navbar__avatar"
                 onClick={() => setProfileOpen(!profileOpen)}
@@ -106,7 +158,10 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <Link to="/login" className="btn btn--primary btn--sm">
+            <Link
+              to="/login"
+              className="btn btn--primary btn--sm navbar__desktop-auth"
+            >
               {t("navbar.login")}
             </Link>
           )}

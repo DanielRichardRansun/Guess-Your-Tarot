@@ -50,7 +50,31 @@
     "wands": "Wands",
     "cups": "Cups",
     "swords": "Swords",
-    "pentacles": "Pentacles"
+    "pentacles": "Pentacles",
+    "keywords_label": "Kata Kunci",
+    "close": "Tutup"
+  },
+  "auth": {
+    "login_title": "Selamat Datang Kembali",
+    "login_subtitle": "Masuk untuk mengakses riwayat tarot dan favorit Anda",
+    "email_placeholder": "Alamat email",
+    "password_placeholder": "Kata sandi",
+    "password_confirm_placeholder": "Konfirmasi kata sandi",
+    "password_min": "Kata sandi (min 8 karakter)",
+    "name_placeholder": "Nama lengkap",
+    "login_btn": "Masuk",
+    "login_loading": "Sedang masuk...",
+    "register_title": "Bergabunglah",
+    "register_subtitle": "Buat akun untuk menyimpan bacaan Anda dan membuka semua fitur",
+    "register_btn": "Buat Akun",
+    "register_loading": "Membuat akun...",
+    "no_account": "Belum punya akun?",
+    "create_one": "Buat akun",
+    "have_account": "Sudah punya akun?",
+    "sign_in": "Masuk",
+    "password_mismatch": "Kata sandi tidak cocok",
+    "invalid_credentials": "Kredensial tidak valid",
+    "register_failed": "Pendaftaran gagal"
   },
   "profile": {
     "edit": "Ubah",

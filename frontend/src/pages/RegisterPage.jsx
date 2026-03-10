@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { GiCrystalBall } from "react-icons/gi";
 import { FiMail, FiLock, FiUser, FiEye, FiEyeOff } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 import "./AuthPage.css";
 
 export default function RegisterPage() {
@@ -15,13 +16,14 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     if (password !== passwordConfirmation) {
-      setError("Passwords do not match");
+      setError(t("auth.password_mismatch"));
       return;
     }
 
@@ -34,7 +36,7 @@ export default function RegisterPage() {
       if (errors) {
         setError(Object.values(errors).flat().join(", "));
       } else {
-        setError(err.response?.data?.message || "Registration failed");
+        setError(err.response?.data?.message || t("auth.register_failed"));
       }
     } finally {
       setLoading(false);
@@ -46,8 +48,8 @@ export default function RegisterPage() {
       <div className="auth__card card">
         <div className="auth__header">
           <GiCrystalBall className="auth__icon" />
-          <h1>Join the Journey</h1>
-          <p>Create an account to save your readings and unlock all features</p>
+          <h1>{t("auth.register_title")}</h1>
+          <p>{t("auth.register_subtitle")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth__form">
@@ -57,7 +59,7 @@ export default function RegisterPage() {
             <FiUser className="auth__field-icon" />
             <input
               type="text"
-              placeholder="Full name"
+              placeholder={t("auth.name_placeholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -68,7 +70,7 @@ export default function RegisterPage() {
             <FiMail className="auth__field-icon" />
             <input
               type="email"
-              placeholder="Email address"
+              placeholder={t("auth.email_placeholder")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -79,7 +81,7 @@ export default function RegisterPage() {
             <FiLock className="auth__field-icon" />
             <input
               type={showPass ? "text" : "password"}
-              placeholder="Password (min 8 characters)"
+              placeholder={t("auth.password_min")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -98,7 +100,7 @@ export default function RegisterPage() {
             <FiLock className="auth__field-icon" />
             <input
               type={showPass ? "text" : "password"}
-              placeholder="Confirm password"
+              placeholder={t("auth.password_confirm_placeholder")}
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               required
@@ -110,12 +112,12 @@ export default function RegisterPage() {
             className="btn btn--primary btn--lg auth__submit"
             disabled={loading}
           >
-            {loading ? "Creating account..." : "Create Account"}
+            {loading ? t("auth.register_loading") : t("auth.register_btn")}
           </button>
         </form>
 
         <p className="auth__switch">
-          Already have an account? <Link to="/login">Sign in</Link>
+          {t("auth.have_account")} <Link to="/login">{t("auth.sign_in")}</Link>
         </p>
       </div>
     </div>
