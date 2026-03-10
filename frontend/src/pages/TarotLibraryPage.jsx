@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import { GiCardRandom } from "react-icons/gi";
+import { useTranslation } from "react-i18next";
 import api from "../api";
 import "./TarotLibraryPage.css";
 
@@ -10,6 +11,7 @@ export default function TarotLibraryPage() {
   const [category, setCategory] = useState("all");
   const [selectedTarot, setSelectedTarot] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchTarots();
@@ -27,12 +29,12 @@ export default function TarotLibraryPage() {
   };
 
   const categories = [
-    { key: "all", label: "All Cards" },
-    { key: "major", label: "Major Arcana" },
-    { key: "wands", label: "Wands" },
-    { key: "cups", label: "Cups" },
-    { key: "swords", label: "Swords" },
-    { key: "pentacles", label: "Pentacles" },
+    { key: "all", label: t("library.all_cards") },
+    { key: "major", label: t("library.major") },
+    { key: "wands", label: t("library.wands") },
+    { key: "cups", label: t("library.cups") },
+    { key: "swords", label: t("library.swords") },
+    { key: "pentacles", label: t("library.pentacles") },
   ];
 
   const filteredTarots = tarots.filter((t) => {
@@ -46,8 +48,8 @@ export default function TarotLibraryPage() {
       <div className="container">
         <div className="library__header">
           <GiCardRandom className="library__header-icon" />
-          <h1>Tarot Library</h1>
-          <p>Explore all 78 tarot cards and their mystical meanings</p>
+          <h1>{t("library.title")}</h1>
+          <p>{t("library.subtitle")}</p>
         </div>
 
         <div className="library__filters">
@@ -55,7 +57,7 @@ export default function TarotLibraryPage() {
             <FiSearch className="library__search-icon" />
             <input
               type="text"
-              placeholder="Search cards..."
+              placeholder={t("library.search_placeholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="library__search-input"
@@ -86,7 +88,9 @@ export default function TarotLibraryPage() {
           </div>
         ) : (
           <>
-            <p className="library__count">{filteredTarots.length} cards</p>
+            <p className="library__count">
+              {t("library.cards_count", { count: filteredTarots.length })}
+            </p>
             <div className="library__grid">
               {filteredTarots.map((tarot, i) => (
                 <div

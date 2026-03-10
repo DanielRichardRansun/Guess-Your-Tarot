@@ -86,7 +86,7 @@ export default function HomePage() {
     } catch (err) {
       if (err.response?.status === 429) {
         setLimitReached(true);
-        setError(err.response.data.message);
+        setError(t("home.limit_reached"));
       } else {
         setError(
           err.response?.data?.message ||
@@ -146,7 +146,7 @@ export default function HomePage() {
     } catch (err) {
       if (err.response?.status === 429) {
         setLimitReached(true);
-        setError(err.response.data.message);
+        setError(t("home.limit_reached"));
       } else {
         setError(
           err.response?.data?.message ||
@@ -219,7 +219,7 @@ export default function HomePage() {
                   className="btn btn--primary btn--sm"
                   style={{ marginTop: "8px" }}
                 >
-                  Sign in for unlimited readings
+                  {t("home.limit_login")}
                 </a>
               )}
             </div>
@@ -232,11 +232,8 @@ export default function HomePage() {
         <div className="container">
           <div className="social__header">
             <FiZap className="social__header-icon" />
-            <h2 className="social__title">Guess My Tarot from Social Media</h2>
-            <p className="social__desc">
-              Connect your account and discover your tarot through your digital
-              activity
-            </p>
+            <h2 className="social__title">{t("home.social_title")}</h2>
+            <p className="social__desc">{t("home.social_desc")}</p>
           </div>
 
           <div className="social__grid">
@@ -259,7 +256,7 @@ export default function HomePage() {
                   onClick={() => handleSocialReveal(platform.key)}
                   disabled={loading}
                 >
-                  <GiCrystalBall /> Reveal My Tarot
+                  <GiCrystalBall /> {t("home.reveal_btn")}
                 </button>
               </div>
             ))}

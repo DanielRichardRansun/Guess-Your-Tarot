@@ -16,6 +16,71 @@
     "subtitle": "Tell us how you feel today and let AI reveal your tarot card. Your thoughts hold the key to your cosmic destiny.",
     "placeholder": "Tell me what's on your mind today... How are you feeling? What happened recently? What are you hoping for?",
     "reveal_btn": "Reveal My Tarot",
-    "shuffling": "Shuffling the cosmic deck..."
+    "shuffling": "Shuffling the cosmic deck...",
+    "limit_reached": "You've reached your daily limit!",
+    "limit_login": "Sign in for unlimited readings",
+    "social_title": "Guess My Tarot from Social Media",
+    "social_desc": "Connect your account and discover your tarot through your digital activity"
+  },
+  "reading": {
+    "not_found": "Reading Not Found",
+    "not_found_desc": "This tarot reading doesn't exist or has been removed.",
+    "go_home": "Go Home",
+    "share": "Share your reading ✨",
+    "copy_link": "Copy Link",
+    "copied": "Copied!",
+    "read_more": "read more",
+    "show_less": "show less",
+    "via": "Via",
+    "support_title": "Tarots That Support You",
+    "challenge_title": "Tarots That Challenge You",
+    "favorite": "Favorite",
+    "favorited": "Favorited",
+    "fav_add": "Add to favorites",
+    "fav_remove": "Remove from favorites",
+    "share_text": "✨ My tarot today is {{name}}! Find out yours at Guess Your Tarot"
+  },
+  "library": {
+    "title": "Tarot Library",
+    "subtitle": "Explore all 78 tarot cards and their mystical meanings",
+    "search_placeholder": "Search cards...",
+    "cards_count": "{{count}} cards",
+    "all_cards": "All Cards",
+    "major": "Major Arcana",
+    "wands": "Wands",
+    "cups": "Cups",
+    "swords": "Swords",
+    "pentacles": "Pentacles"
+  },
+  "profile": {
+    "edit": "Edit",
+    "save": "Save",
+    "logout": "Logout",
+    "current_tarot": "Current Tarot",
+    "history": "History",
+    "favorites": "Favorites",
+    "social": "Social",
+    "empty_history": "No readings yet. Go reveal your tarot!",
+    "empty_fav": "No favorites yet. Heart a reading to save it here!",
+    "get_reading": "Get a Reading",
+    "connect": "Connect"
+  },
+  "about": {
+    "title": "About Guess Your Tarot",
+    "by": "by Ransite",
+    "section1_title": "What This App Does",
+    "section1_p1": "Guess Your Tarot uses artificial intelligence to reveal your daily tarot card based on your thoughts, feelings, and digital activity. Simply tell us how you're feeling or connect your social media accounts, and our AI will select the tarot card that resonates most with your current energy.",
+    "section1_p2": "Each reading includes a personalized explanation of your main tarot card, supportive cards that complement your energy, and challenging cards to be mindful of — helping you gain insight into your day ahead.",
+    "section2_title": "What Data Is Used",
+    "section2_p1": "When you type your thoughts, we send that text to our AI to generate a relevant tarot reading. If you connect a social media account, we analyze your recent public activity (like music history, gaming stats, or watch history) to provide a more personalized reading.",
+    "section2_p2": "We value your privacy. Your data is only used during the reading session and is never shared with third parties. If you create an account, your reading history is saved securely so you can revisit past readings.",
+    "section3_title": "Entertainment Disclaimer",
+    "section3_p1": "Guess Your Tarot is designed for entertainment purposes only. Our AI-generated tarot readings are meant to provide fun insights and food for thought — they should not be taken as professional advice of any kind.",
+    "section3_p2": "Whether you're a tarot enthusiast or just curious, we hope our readings bring a little magic and wonder to your day. Remember, the real power lies within you! ✨"
+  },
+  "footer": {
+    "made_with": "Made with",
+    "entertainment": "For entertainment purposes only",
+    "rights": "All rights reserved."
   }
 }

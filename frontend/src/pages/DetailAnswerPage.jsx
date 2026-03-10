@@ -10,12 +10,14 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 import { FaTwitter, FaFacebook, FaWhatsapp, FaTelegram } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import api from "../api";
 import "./DetailAnswerPage.css";
 
 export default function DetailAnswerPage() {
   const { slug } = useParams();
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
   const [reading, setReading] = useState(null);
   const [isFavorited, setIsFavorited] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -40,7 +42,7 @@ export default function DetailAnswerPage() {
       setReading(res.data.reading);
       setIsFavorited(res.data.is_favorited);
     } catch (err) {
-      setError("Reading not found");
+      setError(t("reading.not_found"));
     } finally {
       setLoading(false);
     }
@@ -62,7 +64,7 @@ export default function DetailAnswerPage() {
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
   const shareText = reading
-    ? `✨ My tarot today is ${reading.main_tarot_name}! Find out yours at Guess Your Tarot`
+    ? t("reading.share_text", { name: reading.main_tarot_name })
     : "";
 
   const shareLinks = {
@@ -73,7 +75,8 @@ export default function DetailAnswerPage() {
   };
 
   const formatDate = (dateStr) => {
-    return new Date(dateStr).toLocaleDateString("en-US", {
+    const locale = i18n.language?.startsWith("id") ? "id-ID" : "en-US";
+    return new Date(dateStr).toLocaleDateString(locale, {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -142,16 +145,16 @@ export default function DetailAnswerPage() {
           className="container container--narrow"
           style={{ textAlign: "center", paddingTop: "120px" }}
         >
-          <h2>Reading Not Found</h2>
+          <h2>{t("reading.not_found")}</h2>
           <p style={{ color: "var(--text-secondary)", marginTop: "12px" }}>
-            This tarot reading doesn't exist or has been removed.
+            {t("reading.not_found_desc")}
           </p>
           <Link
             to="/"
             className="btn btn--primary"
             style={{ marginTop: "24px" }}
           >
-            Go Home
+            {t("reading.go_home")}
           </Link>
         </div>
       </div>
@@ -211,7 +214,7 @@ export default function DetailAnswerPage() {
                 className={`btn btn--icon btn--ghost detail__fav-btn ${isFavorited ? "detail__fav-btn--active" : ""}`}
                 onClick={toggleFavorite}
                 title={
-                  isFavorited ? "Remove from favorites" : "Add to favorites"
+                  isFavorited ? t("reading.fav_remove") : t("reading.fav_add")
                 }
               >
                 <FiHeart />
@@ -220,7 +223,7 @@ export default function DetailAnswerPage() {
             <button
               className="btn btn--icon btn--ghost"
               onClick={copyLink}
-              title="Copy link"
+              title={t("reading.copy_link")}
             >
               {copied ? <FiCheck style={{ color: "#22c55e" }} /> : <FiCopy />}
             </button>
@@ -247,11 +250,11 @@ export default function DetailAnswerPage() {
                   >
                     {showFullInput ? (
                       <>
-                        <FiChevronUp /> show less
+                        <FiChevronUp /> {t("reading.show_less")}
                       </>
                     ) : (
                       <>
-                        <FiChevronDown /> read more
+                        <FiChevronDown /> {t("reading.read_more")}
                       </>
                     )}
                   </button>
@@ -261,7 +264,7 @@ export default function DetailAnswerPage() {
           )}
           {reading.source !== "text" && (
             <div className="detail__source-badge">
-              Via{" "}
+              {t("reading.via")}{" "}
               {reading.source.charAt(0).toUpperCase() + reading.source.slice(1)}
             </div>
           )}
@@ -306,8 +309,8 @@ export default function DetailAnswerPage() {
         {reading.support_tarots && reading.support_tarots.length > 0 && (
           <div className="detail__related">
             <h2 className="detail__related-title">
-              <span className="detail__related-icon">🌟</span> Tarots That
-              Support You
+              <span className="detail__related-icon">🌟</span>{" "}
+              {t("reading.support_title")}
             </h2>
             <div className="detail__related-grid">
               {reading.support_tarots.map((tarot, i) => (
@@ -329,8 +332,8 @@ export default function DetailAnswerPage() {
         {reading.challenge_tarots && reading.challenge_tarots.length > 0 && (
           <div className="detail__related">
             <h2 className="detail__related-title">
-              <span className="detail__related-icon">⚡</span> Tarots That
-              Challenge You
+              <span className="detail__related-icon">⚡</span>{" "}
+              {t("reading.challenge_title")}
             </h2>
             <div className="detail__related-grid">
               {reading.challenge_tarots.map((tarot, i) => (
@@ -350,7 +353,7 @@ export default function DetailAnswerPage() {
 
         {/* Share Bar Bottom */}
         <div className="detail__share-bar detail__share-bar--bottom">
-          <p className="detail__share-label">Share your reading ✨</p>
+          <p className="detail__share-label">{t("reading.share")}</p>
           <div className="detail__share-socials">
             <a
               href={shareLinks.twitter}
@@ -383,17 +386,18 @@ export default function DetailAnswerPage() {
                 className={`btn btn--outline btn--sm ${isFavorited ? "detail__fav-btn--active" : ""}`}
                 onClick={toggleFavorite}
               >
-                <FiHeart /> {isFavorited ? "Favorited" : "Favorite"}
+                <FiHeart />{" "}
+                {isFavorited ? t("reading.favorited") : t("reading.favorite")}
               </button>
             )}
             <button className="btn btn--outline btn--sm" onClick={copyLink}>
               {copied ? (
                 <>
-                  <FiCheck /> Copied!
+                  <FiCheck /> {t("reading.copied")}
                 </>
               ) : (
                 <>
-                  <FiCopy /> Copy Link
+                  <FiCopy /> {t("reading.copy_link")}
                 </>
               )}
             </button>

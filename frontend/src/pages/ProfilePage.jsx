@@ -22,6 +22,7 @@ import {
   FaDiscord,
 } from "react-icons/fa";
 import { GiCrystalBall } from "react-icons/gi";
+import { useTranslation } from "react-i18next";
 import api from "../api";
 import "./ProfilePage.css";
 
@@ -37,6 +38,7 @@ const socialIcons = {
 export default function ProfilePage() {
   const { user, setUser, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [tab, setTab] = useState("history");
   const [history, setHistory] = useState([]);
@@ -88,17 +90,19 @@ export default function ProfilePage() {
 
   if (!user) return null;
 
-  const formatDate = (d) =>
-    new Date(d).toLocaleDateString("en-US", {
+  const formatDate = (d) => {
+    const locale = i18n.language?.startsWith("id") ? "id-ID" : "en-US";
+    return new Date(d).toLocaleDateString(locale, {
       month: "short",
       day: "numeric",
       year: "numeric",
     });
+  };
 
   const tabs = [
-    { key: "history", label: "History", icon: <FiClock /> },
-    { key: "favorites", label: "Favorites", icon: <FiHeart /> },
-    { key: "social", label: "Social", icon: <FiLink /> },
+    { key: "history", label: t("profile.history"), icon: <FiClock /> },
+    { key: "favorites", label: t("profile.favorites"), icon: <FiHeart /> },
+    { key: "social", label: t("profile.social"), icon: <FiLink /> },
   ];
 
   const allPlatforms = [
@@ -132,7 +136,7 @@ export default function ProfilePage() {
                   onClick={handleSaveProfile}
                   disabled={loading}
                 >
-                  <FiSave /> Save
+                  <FiSave /> {t("profile.save")}
                 </button>
                 <button
                   className="btn btn--ghost btn--sm"
@@ -151,14 +155,14 @@ export default function ProfilePage() {
                   className="btn btn--ghost btn--sm"
                   onClick={() => setEditing(true)}
                 >
-                  <FiEdit2 /> Edit
+                  <FiEdit2 /> {t("profile.edit")}
                 </button>
               </>
             )}
             <p className="profile__email">{user.email}</p>
             {user.current_tarot && (
               <p className="profile__current-tarot">
-                <GiCrystalBall /> Current Tarot:{" "}
+                <GiCrystalBall /> {t("profile.current_tarot")}:{" "}
                 <strong>{user.current_tarot?.name}</strong>
               </p>
             )}
@@ -172,7 +176,7 @@ export default function ProfilePage() {
               className="btn btn--ghost btn--sm profile__logout-btn"
               onClick={handleLogout}
             >
-              <FiLogOut /> Logout
+              <FiLogOut /> {t("profile.logout")}
             </button>
           </div>
         </div>
@@ -197,9 +201,9 @@ export default function ProfilePage() {
               {history.length === 0 ? (
                 <div className="profile__empty">
                   <GiCrystalBall />
-                  <p>No readings yet. Go reveal your tarot!</p>
+                  <p>{t("profile.empty_history")}</p>
                   <Link to="/" className="btn btn--primary btn--sm">
-                    Get a Reading
+                    {t("profile.get_reading")}
                   </Link>
                 </div>
               ) : (
@@ -234,7 +238,7 @@ export default function ProfilePage() {
               {favorites.length === 0 ? (
                 <div className="profile__empty">
                   <FiHeart />
-                  <p>No favorites yet. Heart a reading to save it here!</p>
+                  <p>{t("profile.empty_fav")}</p>
                 </div>
               ) : (
                 favorites.map((reading) => (
@@ -274,7 +278,7 @@ export default function ProfilePage() {
                       {platform.charAt(0).toUpperCase() + platform.slice(1)}
                     </span>
                     <button className="btn btn--outline btn--sm">
-                      Connect
+                      {t("profile.connect")}
                     </button>
                   </div>
                 );

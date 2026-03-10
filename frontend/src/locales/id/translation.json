@@ -16,6 +16,71 @@
     "subtitle": "Katakan pada kami bagaimana perasaan Anda hari ini dan biarkan AI mengungkapkan kartu tarot Anda. Pikiran Anda memegang kunci takdir kosmik Anda.",
     "placeholder": "Katakan apa yang ada di pikiran Anda hari ini... Bagaimana perasaan Anda? Apa yang baru saja terjadi? Apa yang Anda harapkan?",
     "reveal_btn": "Ungkap Tarot Saya",
-    "shuffling": "Mengocok dek kosmik..."
+    "shuffling": "Mengocok dek kosmik...",
+    "limit_reached": "Anda telah mencapai batas harian!",
+    "limit_login": "Masuk untuk bacaan tak terbatas",
+    "social_title": "Tebak Tarot Saya dari Media Sosial",
+    "social_desc": "Hubungkan akun Anda dan temukan tarot Anda melalui aktivitas digital Anda"
+  },
+  "reading": {
+    "not_found": "Bacaan Tidak Ditemukan",
+    "not_found_desc": "Bacaan tarot ini tidak ada atau telah dihapus.",
+    "go_home": "Kembali ke Beranda",
+    "share": "Bagikan bacaan Anda ✨",
+    "copy_link": "Salin Link",
+    "copied": "Tersalin!",
+    "read_more": "baca selengkapnya",
+    "show_less": "tampilkan lebih sedikit",
+    "via": "Melalui",
+    "support_title": "Tarot Yang Mendukung Anda",
+    "challenge_title": "Tarot Yang Menantang Anda",
+    "favorite": "Favorit",
+    "favorited": "Difavoritkan",
+    "fav_add": "Tambah ke favorit",
+    "fav_remove": "Hapus dari favorit",
+    "share_text": "✨ Tarot saya hari ini adalah {{name}}! Cari tahu tarot Anda di Guess Your Tarot"
+  },
+  "library": {
+    "title": "Pustaka Tarot",
+    "subtitle": "Jelajahi semua 78 kartu tarot dan makna mistisnya",
+    "search_placeholder": "Cari kartu...",
+    "cards_count": "{{count}} kartu",
+    "all_cards": "Semua Kartu",
+    "major": "Major Arcana",
+    "wands": "Wands",
+    "cups": "Cups",
+    "swords": "Swords",
+    "pentacles": "Pentacles"
+  },
+  "profile": {
+    "edit": "Ubah",
+    "save": "Simpan",
+    "logout": "Keluar",
+    "current_tarot": "Tarot Saat Ini",
+    "history": "Riwayat",
+    "favorites": "Favorit",
+    "social": "Sosial",
+    "empty_history": "Belum ada bacaan. Yuk, ungkap tarotmu!",
+    "empty_fav": "Belum ada favorit. Beri tanda hati pada bacaan untuk menyimpannya di sini!",
+    "get_reading": "Dapatkan Bacaan",
+    "connect": "Hubungkan"
+  },
+  "about": {
+    "title": "Tentang Guess Your Tarot",
+    "by": "oleh Ransite",
+    "section1_title": "Apa kegunaan Aplikasi Ini",
+    "section1_p1": "Guess Your Tarot menggunakan kecerdasan buatan untuk mengungkapkan kartu tarot harian Anda berdasarkan pikiran, perasaan, dan aktivitas digital Anda. Cukup beri tahu kami bagaimana perasaan Anda atau hubungkan akun media sosial Anda, dan AI kami akan memilih kartu tarot yang paling beresonansi dengan energi Anda saat ini.",
+    "section1_p2": "Setiap bacaan mencakup penjelasan terpersonalisasi tentang kartu tarot utama Anda, kartu pendukung yang melengkapi energi Anda, dan kartu tantangan yang perlu diwaspadai — membantu Anda mendapatkan wawasan tentang hari yang akan datang.",
+    "section2_title": "Data Apa yang Digunakan",
+    "section2_p1": "Saat Anda mengetikkan pikiran Anda, kami mengirimkan teks tersebut ke AI kami untuk menghasilkan bacaan tarot yang relevan. Jika Anda menghubungkan akun media sosial, kami menganalisis aktivitas publik terbaru Anda (seperti riwayat musik, statistik permainan, atau riwayat tontonan) untuk memberikan bacaan yang lebih terpersonalisasi.",
+    "section2_p2": "Kami menghargai privasi Anda. Data Anda hanya digunakan selama sesi pembacaan dan tidak pernah dibagikan kepada pihak ketiga. Jika Anda membuat akun, riwayat pembacaan Anda disimpan dengan aman sehingga Anda dapat meninjau kembali pembacaan sebelumnya.",
+    "section3_title": "Penafian Hiburan",
+    "section3_p1": "Guess Your Tarot dirancang hanya untuk tujuan hiburan. Bacaan tarot buatan AI kami dimaksudkan untuk memberikan wawasan yang menyenangkan dan bahan pemikiran — pembacaan tersebut tidak boleh dianggap sebagai saran profesional dalam bentuk apa pun.",
+    "section3_p2": "Apakah Anda penggemar tarot atau sekadar penasaran, kami berharap bacaan kami membawa sedikit keajaiban dan keajaiban dalam hari Anda. Ingat, kekuatan sebenarnya ada di dalam diri Anda! ✨"
+  },
+  "footer": {
+    "made_with": "Dibuat dengan",
+    "entertainment": "Hanya untuk tujuan hiburan",
+    "rights": "Seluruh hak cipta dilindungi undang-undang."
   }
 }
