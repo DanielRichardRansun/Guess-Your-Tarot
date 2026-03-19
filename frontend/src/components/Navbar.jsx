@@ -80,6 +80,9 @@ export default function Navbar() {
 
           {/* Mobile-only auth section */}
           <div className="navbar__mobile-auth">
+            <div className="navbar__lang-mobile">
+              <LanguageSwitcher />
+            </div>
             {user ? (
               <button
                 className="btn btn--outline btn--sm"
@@ -112,7 +115,9 @@ export default function Navbar() {
         </div>
 
         <div className="navbar__actions">
-          <LanguageSwitcher />
+          <div className="navbar__lang-desktop">
+            <LanguageSwitcher />
+          </div>
 
           <button
             className="btn btn--icon btn--ghost navbar__theme-btn"

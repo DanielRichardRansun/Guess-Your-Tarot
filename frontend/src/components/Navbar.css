@@ -208,6 +208,10 @@
   display: none;
 }
 
+.navbar__lang-mobile {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .navbar__container {
     gap: 16px;
@@ -258,6 +262,18 @@
     border-top: 1px solid var(--border-color);
   }
 
+  .navbar__lang-desktop {
+    display: none;
+  }
+
+  .navbar__lang-mobile {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 4px;
+  }
+
   .navbar__mobile-auth .btn {
     width: 100%;
     justify-content: center;
@@ -283,5 +299,16 @@
   /* Hide desktop sign-in button on mobile */
   .navbar__desktop-auth {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar__logo-text {
+    font-size: 1rem;
+    letter-spacing: 0;
+  }
+
+  .navbar__container {
+    gap: 8px;
   }
 }
