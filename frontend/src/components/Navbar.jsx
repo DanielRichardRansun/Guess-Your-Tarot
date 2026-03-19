@@ -62,8 +62,9 @@ export default function Navbar() {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <nav className="navbar glass" ref={navRef}>
-      <div className="navbar__container container">
+    <>
+      <nav className="navbar glass" ref={navRef}>
+        <div className="navbar__container container">
         <Link to="/" className="navbar__logo">
           <GiCrystalBall className="navbar__logo-icon" />
           <span className="navbar__logo-text">Guess Your Tarot</span>
@@ -137,13 +138,18 @@ export default function Navbar() {
 
         {/* Hamburger toggle button - visible on mobile/tablet */}
         <button
-          className="navbar__mobile-toggle"
+          className="btn btn--icon btn--ghost navbar__mobile-toggle"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
-          {mobileOpen ? <FiX /> : <FiMenu />}
+          {mobileOpen ? (
+            <FiX style={{ stroke: "white", minWidth: 24, minHeight: 24, strokeWidth: 2.5 }} />
+          ) : (
+            <FiMenu style={{ stroke: "white", minWidth: 24, minHeight: 24, strokeWidth: 2.5 }} />
+          )}
         </button>
       </div>
+      </nav>
 
       {/* Mobile/Tablet slide-in menu */}
       {mobileOpen && (
@@ -252,6 +258,6 @@ export default function Navbar() {
           )}
         </div>
       </div>
-    </nav>
+    </>
   );
 }

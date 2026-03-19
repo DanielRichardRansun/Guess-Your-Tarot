@@ -224,9 +224,10 @@
 }
 
 .navbar__mobile-toggle svg {
-  width: 24px;
-  height: 24px;
-  stroke-width: 2.5;
+  min-width: 24px;
+  min-height: 24px;
+  stroke: currentColor !important;
+  fill: none !important;
 }
 
 /* =========================================
