@@ -43,6 +43,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .footer__heart {
@@ -53,4 +55,37 @@
 .footer__year {
   color: var(--text-muted);
   font-size: 0.8rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .footer {
+    padding: 32px 0;
+    margin-top: 48px;
+  }
+
+  .footer__title {
+    font-size: 1rem;
+  }
+
+  .footer__copy {
+    font-size: 0.82rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .footer {
+    padding: 24px 0;
+    margin-top: 32px;
+  }
+
+  .footer__copy {
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  .footer__year {
+    font-size: 0.72rem;
+  }
 }
