@@ -19,6 +19,12 @@ if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
     @mkdir('/tmp/cache', 0777, true);
 }
 
+// Fix prefix '/api' for Vercel Routing
+$uri = $_SERVER['REQUEST_URI'];
+if (strpos($uri, '/api') === 0) {
+    $_SERVER['REQUEST_URI'] = substr($uri, 4) ?: '/';
+}
+
 try {
     require __DIR__ . '/../public/index.php';
 } catch (\Throwable $e) {
