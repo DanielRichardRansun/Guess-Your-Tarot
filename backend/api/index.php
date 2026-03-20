@@ -1,4 +1,14 @@
 <?php
+// Trik Sakti Vercel: Penanganan CORS Cepat (Pra-penerbangan Browser)
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit(0);
+}
+
 if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
     // Trik Sakti Vercel Serverless (Read-Only Filesystem Fix)
     putenv('APP_SERVICES_CACHE=/tmp/cache/services.php');
