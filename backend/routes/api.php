@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TarotController;
 use App\Http\Controllers\TarotReadingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SpotifyController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -19,6 +20,10 @@ Route::post('/readings', [TarotReadingController::class, 'create']);
 
 // View reading by share slug (public)
 Route::get('/readings/{slug}', [TarotReadingController::class, 'show']);
+
+// Spotify Integration
+Route::get('/spotify/redirect', [SpotifyController::class, 'redirect']);
+Route::get('/spotify/callback', [SpotifyController::class, 'callback']);
 
 // Authenticated routes
 Route::middleware('auth:sanctum')->group(function () {

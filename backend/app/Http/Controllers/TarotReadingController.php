@@ -43,7 +43,23 @@ class TarotReadingController extends Controller
         $language = $request->input('language', 'EN');
 
         // If source is social media, create a summary for the AI
-        if ($source !== 'text' && $sourceData) {
+        if ($source === 'spotify') {
+            if (!isset($sourceData['code'])) {
+                 return response()->json(['message' => 'Missing Spotify auth code.'], 400);
+            }
+            try {
+                $spotifyData = app(\App\Services\SpotifyService::class)->getSpotifyData($sourceData['code']);
+                
+                $inputText = "User's Top Tracks recently: " . implode(', ', $spotifyData['top_tracks']) . ". \n";
+                $inputText .= "User's Top Artists recently: " . implode(', ', $spotifyData['top_artists']) . ". \n";
+                $inputText .= "Based on this music taste, perform a thorough tarot reading.";
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Failed to retrieve data from Spotify.',
+                    'error' => config('app.debug') ? $e->getMessage() : null,
+                ], 500);
+            }
+        } elseif ($source !== 'text' && $sourceData) {
             $inputText = $inputText ?: "Based on my {$source} activity";
         }
 

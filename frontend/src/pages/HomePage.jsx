@@ -98,17 +98,68 @@ export default function HomePage() {
     }
   };
 
+  const doRealSocialReveal = async (platform, source_data) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await api.post("/readings", {
+        input_text: `Based on my ${platform} activity, what tarot represents me today?`,
+        source: platform,
+        source_data,
+        language: i18n.language?.toUpperCase().startsWith("ID") ? "ID" : "EN",
+      });
+      navigate(`/reading/${res.data.reading.share_slug}`);
+    } catch (err) {
+      if (err.response?.status === 429) {
+        setLimitReached(true);
+        setError(t("home.limit_reached"));
+      } else {
+        setError(
+          err.response?.data?.message ||
+            "Something went wrong. Please try again."
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSocialReveal = async (platform) => {
+    if (platform === "spotify") {
+      try {
+        const res = await api.get("/spotify/redirect");
+        const width = 500;
+        const height = 700;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+
+        window.open(
+          res.data.url,
+          "Spotify Login",
+          `width=${width},height=${height},top=${top},left=${left}`
+        );
+
+        const messageListener = async (event) => {
+          if (event.data?.source === "guess-your-tarot") {
+            window.removeEventListener("message", messageListener);
+            if (event.data.type === "spotify_auth_success") {
+              await doRealSocialReveal(platform, { code: event.data.code });
+            } else {
+              setError("Spotify Authentication failed. Please try again.");
+            }
+          }
+        };
+
+        window.addEventListener("message", messageListener);
+      } catch (err) {
+        setError("Failed to connect to Spotify.");
+      }
+      return;
+    }
+
     // Mock social data for demo
     const mockData = {
-      spotify: {
-        recent_tracks: [
-          "Bohemian Rhapsody",
-          "Stairway to Heaven",
-          "Hotel California",
-        ],
-        mood: "nostalgic, reflective",
-      },
       steam: {
         recent_games: ["Elden Ring", "Stardew Valley", "Dark Souls"],
         playtime_hours: 42,
@@ -132,30 +183,7 @@ export default function HomePage() {
       },
     };
 
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await api.post("/readings", {
-        input_text: `Based on my ${platform} activity, what tarot represents me today?`,
-        source: platform,
-        source_data: mockData[platform],
-        language: i18n.language?.toUpperCase().startsWith("ID") ? "ID" : "EN",
-      });
-      navigate(`/reading/${res.data.reading.share_slug}`);
-    } catch (err) {
-      if (err.response?.status === 429) {
-        setLimitReached(true);
-        setError(t("home.limit_reached"));
-      } else {
-        setError(
-          err.response?.data?.message ||
-            "Something went wrong. Please try again.",
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
+    await doRealSocialReveal(platform, mockData[platform]);
   };
 
   const handleKeyDown = (e) => {
