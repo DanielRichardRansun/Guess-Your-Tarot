@@ -51,8 +51,8 @@ class TarotReadingController extends Controller
             $aiResult = $aiService->generateReading($inputText, $source, $sourceData, $language);
 
             $reading = TarotReading::create([
-                'user_id' => Auth::id(),
-                'guest_ip' => Auth::check() ? null : $request->ip(),
+                'user_id' => auth('sanctum')->id(),
+                'guest_ip' => auth('sanctum')->check() ? null : $request->ip(),
                 'input_text' => $request->input('input_text', $inputText),
                 'source' => $source,
                 'source_data' => $sourceData,
@@ -66,8 +66,8 @@ class TarotReadingController extends Controller
             ]);
 
             // Update user's current tarot if logged in
-            if (Auth::check()) {
-                Auth::user()->update(['current_tarot_id' => $aiResult['main_tarot_id']]);
+            if (auth('sanctum')->check()) {
+                auth('sanctum')->user()->update(['current_tarot_id' => $aiResult['main_tarot_id']]);
             }
 
             $reading->load('mainTarot');
@@ -91,8 +91,8 @@ class TarotReadingController extends Controller
             ->firstOrFail();
 
         $isFavorited = false;
-        if (Auth::check()) {
-            $isFavorited = UserFavorite::where('user_id', Auth::id())
+        if (auth('sanctum')->check()) {
+            $isFavorited = UserFavorite::where('user_id', auth('sanctum')->id())
                 ->where('tarot_reading_id', $reading->id)
                 ->exists();
         }
