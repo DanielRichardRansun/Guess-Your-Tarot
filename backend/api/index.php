@@ -21,10 +21,15 @@ if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
 
 // Fix prefix '/api' for Vercel Routing
 $uri = $_SERVER['REQUEST_URI'];
-if (strpos($uri, '/api') === 0) {
-    $newUri = substr($uri, 4);
-    $_SERVER['REQUEST_URI'] = ($newUri === '' || $newUri === false) ? '/' : $newUri;
+$prefix = '/api';
+if (substr($uri, 0, strlen($prefix)) === $prefix) {
+    $uri = substr($uri, strlen($prefix));
 }
+if ($uri === '') {
+    $uri = '/';
+}
+$_SERVER['REQUEST_URI'] = $uri;
+$_SERVER['PHP_SELF'] = '/index.php'; // Force PHP_SELF for Laravel routing
 
 try {
     require __DIR__ . '/../public/index.php';
