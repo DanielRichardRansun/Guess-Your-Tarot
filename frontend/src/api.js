@@ -3,7 +3,7 @@ import axios from "axios";
 const api = axios.create({
   // baseURL: "http://localhost:8000/api",
   baseURL:
-    "https://treatments-missing-accountability-conventional.trycloudflare.com/api",
+    "https://guess-your-tarot.vercel.app/api",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",

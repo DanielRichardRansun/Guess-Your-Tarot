@@ -15,13 +15,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function (\Throwable $e, \Illuminate\Http\Request $request) {
-            header('Content-Type: text/plain; charset=utf-8');
-            echo "🔥 ORIGINAL LARAVEL ERROR:\n";
-            echo $e->getMessage() . "\n";
-            echo "File: " . $e->getFile() . " on line " . $e->getLine() . "\n\n";
-            exit;
-        });
+        //
     })->create();
 
 if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
