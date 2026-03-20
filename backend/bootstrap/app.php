@@ -15,8 +15,12 @@ $app = Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->shouldRenderJsonWhen(function (\Illuminate\Http\Request $request, \Throwable $e) {
-            return true;
+        $exceptions->render(function (\Throwable $e, \Illuminate\Http\Request $request) {
+            header('Content-Type: text/plain; charset=utf-8');
+            echo "🔥 ORIGINAL LARAVEL ERROR:\n";
+            echo $e->getMessage() . "\n";
+            echo "File: " . $e->getFile() . " on line " . $e->getLine() . "\n\n";
+            exit;
         });
     })->create();
 
