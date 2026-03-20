@@ -102,7 +102,7 @@ class TarotSeeder extends Seeder
         ];
 
         foreach ($tarots as $tarot) {
-            Tarot::create($tarot);
+            Tarot::updateOrCreate(['number' => $tarot['number']], $tarot);
         }
     }
 }
