@@ -22,7 +22,8 @@ if (isset($_SERVER['VERCEL']) || isset($_ENV['VERCEL'])) {
 // Fix prefix '/api' for Vercel Routing
 $uri = $_SERVER['REQUEST_URI'];
 if (strpos($uri, '/api') === 0) {
-    $_SERVER['REQUEST_URI'] = substr($uri, 4) ?: '/';
+    $newUri = substr($uri, 4);
+    $_SERVER['REQUEST_URI'] = ($newUri === '' || $newUri === false) ? '/' : $newUri;
 }
 
 try {
