@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
-import { useAuth } from "../contexts/AuthContext";
-import { FiSun, FiMoon, FiMenu, FiX, FiUser, FiLogOut } from "react-icons/fi";
+import { FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
 import { GiCrystalBall } from "react-icons/gi";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -10,33 +9,13 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const profileRef = useRef(null);
-  const navRef = useRef(null);
-
-  // Close profile dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (profileRef.current && !profileRef.current.contains(e.target)) {
-        setProfileOpen(false);
-      }
-    };
-    if (profileOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [profileOpen]);
 
   // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
-    setProfileOpen(false);
   }, [location.pathname]);
 
   // Lock body scroll when mobile menu is open
@@ -63,7 +42,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar glass" ref={navRef}>
+      <nav className="navbar glass">
         <div className="navbar__container container">
         <Link to="/" className="navbar__logo">
           <GiCrystalBall className="navbar__logo-icon" />
@@ -93,47 +72,6 @@ export default function Navbar() {
           >
             {theme === "dark" ? <FiSun /> : <FiMoon />}
           </button>
-
-          {user ? (
-            <div className="navbar__profile" ref={profileRef}>
-              <button
-                className="navbar__avatar"
-                onClick={() => setProfileOpen(!profileOpen)}
-              >
-                <span className="navbar__avatar-text">
-                  {user.name?.charAt(0).toUpperCase()}
-                </span>
-              </button>
-              {profileOpen && (
-                <div className="navbar__dropdown">
-                  <div className="navbar__dropdown-header">
-                    <strong>{user.name}</strong>
-                    <span>{user.email}</span>
-                  </div>
-                  <Link
-                    to="/profile"
-                    className="navbar__dropdown-item"
-                    onClick={() => setProfileOpen(false)}
-                  >
-                    <FiUser /> {t("navbar.profile")}
-                  </Link>
-                  <button
-                    className="navbar__dropdown-item navbar__dropdown-item--danger"
-                    onClick={() => {
-                      logout();
-                      setProfileOpen(false);
-                    }}
-                  >
-                    <FiLogOut /> {t("navbar.logout")}
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link to="/login" className="btn btn--primary btn--sm">
-              {t("navbar.login")}
-            </Link>
-          )}
         </div>
 
         {/* Hamburger toggle button - visible on mobile/tablet */}
@@ -167,19 +105,6 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* User info header (if logged in) */}
-        {user && (
-          <div className="navbar__mobile-user">
-            <div className="navbar__mobile-avatar">
-              <span>{user.name?.charAt(0).toUpperCase()}</span>
-            </div>
-            <div className="navbar__mobile-user-info">
-              <strong>{user.name}</strong>
-              <span>{user.email}</span>
-            </div>
-          </div>
-        )}
-
         {/* Navigation Links */}
         <div className="navbar__mobile-nav">
           {navLinks.map(({ path, label }) => (
@@ -192,16 +117,6 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-          {user && (
-            <Link
-              to="/profile"
-              className={`navbar__mobile-link ${isActive("/profile") ? "navbar__mobile-link--active" : ""}`}
-              onClick={closeMobile}
-            >
-              <FiUser style={{ marginRight: 8 }} />
-              {t("navbar.profile")}
-            </Link>
-          )}
         </div>
 
         {/* Divider */}
@@ -221,41 +136,6 @@ export default function Navbar() {
         {/* Language Switcher */}
         <div className="navbar__mobile-action navbar__mobile-action--lang">
           <LanguageSwitcher />
-        </div>
-
-        {/* Divider */}
-        <div className="navbar__mobile-divider" />
-
-        {/* Auth buttons */}
-        <div className="navbar__mobile-auth">
-          {user ? (
-            <button
-              className="btn btn--outline navbar__mobile-logout"
-              onClick={() => {
-                logout();
-                closeMobile();
-              }}
-            >
-              <FiLogOut /> {t("navbar.logout")}
-            </button>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="btn btn--primary"
-                onClick={closeMobile}
-              >
-                {t("navbar.login")}
-              </Link>
-              <Link
-                to="/register"
-                className="btn btn--outline"
-                onClick={closeMobile}
-              >
-                {t("navbar.signup")}
-              </Link>
-            </>
-          )}
         </div>
       </div>
     </>

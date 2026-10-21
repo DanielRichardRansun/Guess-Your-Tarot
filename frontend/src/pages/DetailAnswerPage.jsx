@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import {
   FiHeart,
   FiCopy,
@@ -11,15 +10,14 @@ import {
 } from "react-icons/fi";
 import { FaTwitter, FaFacebook, FaWhatsapp, FaTelegram } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-import api from "../api";
+import { getReadingBySlug, toggleFavorite, isFavorited as checkFavorited } from "../services/readingStorage";
 import "./DetailAnswerPage.css";
 
 export default function DetailAnswerPage() {
   const { slug } = useParams();
-  const { user } = useAuth();
   const { t, i18n } = useTranslation();
   const [reading, setReading] = useState(null);
-  const [isFavorited, setIsFavorited] = useState(false);
+  const [favorited, setFavorited] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showFullInput, setShowFullInput] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -27,7 +25,14 @@ export default function DetailAnswerPage() {
   const [cardFlipped, setCardFlipped] = useState(false);
 
   useEffect(() => {
-    fetchReading();
+    const found = getReadingBySlug(slug);
+    if (found) {
+      setReading(found);
+      setFavorited(checkFavorited(found.id));
+    } else {
+      setError(t("reading.not_found"));
+    }
+    setLoading(false);
   }, [slug]);
 
   useEffect(() => {
@@ -36,24 +41,10 @@ export default function DetailAnswerPage() {
     }
   }, [reading]);
 
-  const fetchReading = async () => {
-    try {
-      const res = await api.get(`/readings/${slug}`);
-      setReading(res.data.reading);
-      setIsFavorited(res.data.is_favorited);
-    } catch (err) {
-      setError(t("reading.not_found"));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const toggleFavorite = async () => {
-    if (!user) return;
-    try {
-      const res = await api.post(`/readings/${reading.id}/favorite`);
-      setIsFavorited(res.data.is_favorited);
-    } catch {}
+  const handleToggleFavorite = () => {
+    if (!reading) return;
+    const nowFavorited = toggleFavorite(reading.id);
+    setFavorited(nowFavorited);
   };
 
   const copyLink = () => {
@@ -209,17 +200,15 @@ export default function DetailAnswerPage() {
             </a>
           </div>
           <div className="detail__share-actions">
-            {user && (
-              <button
-                className={`btn btn--icon btn--ghost detail__fav-btn ${isFavorited ? "detail__fav-btn--active" : ""}`}
-                onClick={toggleFavorite}
-                title={
-                  isFavorited ? t("reading.fav_remove") : t("reading.fav_add")
-                }
-              >
-                <FiHeart />
-              </button>
-            )}
+            <button
+              className={`btn btn--icon btn--ghost detail__fav-btn ${favorited ? "detail__fav-btn--active" : ""}`}
+              onClick={handleToggleFavorite}
+              title={
+                favorited ? t("reading.fav_remove") : t("reading.fav_add")
+              }
+            >
+              <FiHeart />
+            </button>
             <button
               className="btn btn--icon btn--ghost"
               onClick={copyLink}
@@ -381,15 +370,13 @@ export default function DetailAnswerPage() {
             </a>
           </div>
           <div className="detail__share-actions">
-            {user && (
-              <button
-                className={`btn btn--outline btn--sm ${isFavorited ? "detail__fav-btn--active" : ""}`}
-                onClick={toggleFavorite}
-              >
-                <FiHeart />{" "}
-                {isFavorited ? t("reading.favorited") : t("reading.favorite")}
-              </button>
-            )}
+            <button
+              className={`btn btn--outline btn--sm ${favorited ? "detail__fav-btn--active" : ""}`}
+              onClick={handleToggleFavorite}
+            >
+              <FiHeart />{" "}
+              {favorited ? t("reading.favorited") : t("reading.favorite")}
+            </button>
             <button className="btn btn--outline btn--sm" onClick={copyLink}>
               {copied ? (
                 <>

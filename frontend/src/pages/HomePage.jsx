@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import {
   FaSpotify,
   FaSteam,
@@ -9,11 +8,12 @@ import {
   FaYoutube,
   FaDiscord,
 } from "react-icons/fa";
-import { FiSend, FiStar, FiZap } from "react-icons/fi";
+import { FiStar, FiZap } from "react-icons/fi";
 import { GiCrystalBall, GiCardRandom } from "react-icons/gi";
 import { useTranslation } from "react-i18next";
 import CardShuffle from "../components/CardShuffle";
-import api from "../api";
+import { generateReading } from "../services/geminiService";
+import { saveReading } from "../services/readingStorage";
 import "./HomePage.css";
 
 const socialPlatforms = [
@@ -65,9 +65,7 @@ export default function HomePage() {
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [limitReached, setLimitReached] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
   const { t, i18n } = useTranslation();
 
   const handleReveal = async () => {
@@ -77,89 +75,30 @@ export default function HomePage() {
     setError("");
 
     try {
-      const res = await api.post("/readings", {
+      const language = i18n.language?.toUpperCase().startsWith("ID") ? "ID" : "EN";
+      const result = await generateReading(inputText, "text", null, language);
+      const saved = saveReading({
+        ...result,
         input_text: inputText,
         source: "text",
-        language: i18n.language?.toUpperCase().startsWith("ID") ? "ID" : "EN",
       });
-      navigate(`/reading/${res.data.reading.share_slug}`);
+      navigate(`/reading/${saved.share_slug}`);
     } catch (err) {
-      if (err.response?.status === 429) {
-        setLimitReached(true);
-        setError(t("home.limit_reached"));
-      } else {
-        setError(
-          err.response?.data?.message ||
-            "Something went wrong. Please try again.",
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const doRealSocialReveal = async (platform, source_data) => {
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await api.post("/readings", {
-        input_text: `Based on my ${platform} activity, what tarot represents me today?`,
-        source: platform,
-        source_data,
-        language: i18n.language?.toUpperCase().startsWith("ID") ? "ID" : "EN",
-      });
-      navigate(`/reading/${res.data.reading.share_slug}`);
-    } catch (err) {
-      if (err.response?.status === 429) {
-        setLimitReached(true);
-        setError(t("home.limit_reached"));
-      } else {
-        setError(
-          err.response?.data?.message ||
-            "Something went wrong. Please try again."
-        );
-      }
+      setError(
+        err.message || "Something went wrong. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const handleSocialReveal = async (platform) => {
-    if (platform === "spotify") {
-      try {
-        const res = await api.get("/spotify/redirect");
-        const width = 500;
-        const height = 700;
-        const left = (window.innerWidth - width) / 2;
-        const top = (window.innerHeight - height) / 2;
-
-        window.open(
-          res.data.url,
-          "Spotify Login",
-          `width=${width},height=${height},top=${top},left=${left}`
-        );
-
-        const messageListener = async (event) => {
-          if (event.data?.source === "guess-your-tarot") {
-            window.removeEventListener("message", messageListener);
-            if (event.data.type === "spotify_auth_success") {
-              await doRealSocialReveal(platform, { code: event.data.code });
-            } else {
-              setError("Spotify Authentication failed. Please try again.");
-            }
-          }
-        };
-
-        window.addEventListener("message", messageListener);
-      } catch (err) {
-        setError("Failed to connect to Spotify.");
-      }
-      return;
-    }
-
-    // Mock social data for demo
+    // Mock social data for demo (no backend OAuth needed)
     const mockData = {
+      spotify: {
+        top_tracks: ["Bohemian Rhapsody", "Stairway to Heaven", "Hotel California"],
+        top_artists: ["Queen", "Led Zeppelin", "Eagles"],
+      },
       steam: {
         recent_games: ["Elden Ring", "Stardew Valley", "Dark Souls"],
         playtime_hours: 42,
@@ -183,7 +122,27 @@ export default function HomePage() {
       },
     };
 
-    await doRealSocialReveal(platform, mockData[platform]);
+    setLoading(true);
+    setError("");
+
+    try {
+      const inputMsg = `Based on my ${platform} activity, what tarot represents me today?`;
+      const language = i18n.language?.toUpperCase().startsWith("ID") ? "ID" : "EN";
+      const result = await generateReading(inputMsg, platform, mockData[platform], language);
+      const saved = saveReading({
+        ...result,
+        input_text: inputMsg,
+        source: platform,
+        source_data: mockData[platform],
+      });
+      navigate(`/reading/${saved.share_slug}`);
+    } catch (err) {
+      setError(
+        err.message || "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -237,19 +196,8 @@ export default function HomePage() {
           </div>
 
           {error && (
-            <div
-              className={`hero__error ${limitReached ? "hero__error--limit" : ""}`}
-            >
+            <div className="hero__error">
               <p>{error}</p>
-              {limitReached && !user && (
-                <a
-                  href="/login"
-                  className="btn btn--primary btn--sm"
-                  style={{ marginTop: "8px" }}
-                >
-                  {t("home.limit_login")}
-                </a>
-              )}
             </div>
           )}
         </div>

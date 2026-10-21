@@ -1,0 +1,134 @@
+// Gemini AI service - calls the API directly from the browser
+// No backend needed!
+
+import tarotCards, { getTarotByNumber } from '../data/tarotCards';
+
+const API_KEY = 'AIzaSyBqgRk-d5sMdtBVdsIRGJueHQ780AfaSRw';
+const MODEL_NAMES = ['gemini-2.5-flash'];
+
+export async function generateReading(userInput, source = 'text', sourceData = null, language = 'EN') {
+  const tarotList = tarotCards.map(t => `#${t.number} ${t.name}`).join(', ');
+
+  let contextInfo = '';
+  if (source !== 'text' && sourceData) {
+    contextInfo = `\n\nThe user connected their ${source} account. Here is their recent activity data:\n${JSON.stringify(sourceData, null, 2)}`;
+  }
+
+  const langName = language === 'ID' ? 'Indonesian' : 'English';
+  const systemInstruction = `You are a mystical and wise tarot reader AI. Based on the user's message, choose the most fitting tarot card for them today and provide a detailed reading.
+${contextInfo}
+
+Available tarot cards (use these exact numbers): ${tarotList}
+
+You MUST respond in the following JSON format (no markdown, no code blocks, just pure JSON):
+{
+    "main_tarot_number": <number of the chosen tarot card>,
+    "short_explanation": "<A compelling 2-3 sentence summary of why this card was chosen for the user. Make it personal and relate to what they said.>",
+    "long_explanation": "<A detailed reading in 3-4 paragraphs. First paragraph: introduce the card and why it resonates with the user. Second paragraph: break down what this means for different areas of their life (love, career, personal growth) as bullet points use • symbol. Third paragraph: advice and guidance for moving forward. Make it mystical yet practical, encouraging yet honest.>",
+    "support_tarots": [<3 different tarot card numbers that support/complement the main card>],
+    "challenge_tarots": [<3 different tarot card numbers that represent challenges or things to be mindful of>],
+    "support_reasons": ["<reason for support card 1>", "<reason for support card 2>", "<reason for support card 3>"],
+    "challenge_reasons": ["<reason for challenge card 1>", "<reason for challenge card 2>", "<reason for challenge card 3>"]
+}
+
+The user's current language preference is: ${langName}. Respond in this language.
+Important rules:
+- All tarot numbers must be from 1 to 78
+- support_tarots and challenge_tarots must each contain exactly 3 different numbers
+- None of the support or challenge numbers should be the same as the main_tarot_number
+- Make the reading deeply personal based on what the user shared
+- Be mystical and enchanting in tone, but also practical and encouraging`;
+
+  let lastError = null;
+
+  for (const modelName of MODEL_NAMES) {
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: userInput }] }],
+            system_instruction: { parts: [{ text: systemInstruction }] },
+            generationConfig: {
+              temperature: 0.8,
+              topP: 0.95,
+              topK: 40,
+              maxOutputTokens: 2048,
+              responseMimeType: 'application/json',
+            },
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage = errorData?.error?.message || 'Unknown API error';
+        console.warn(`Gemini model ${modelName} failed:`, errorMessage);
+        lastError = new Error(`Model ${modelName} failed: ${errorMessage}`);
+        continue;
+      }
+
+      const data = await response.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!text) {
+        console.warn(`Gemini model ${modelName} returned empty text`);
+        continue;
+      }
+
+      const reading = JSON.parse(text);
+
+      if (!reading || !reading.main_tarot_number) {
+        throw new Error('Invalid AI response format');
+      }
+
+      // Resolve tarot details
+      let mainTarot = getTarotByNumber(reading.main_tarot_number);
+      if (!mainTarot) {
+        mainTarot = tarotCards[Math.floor(Math.random() * tarotCards.length)];
+      }
+
+      const supportTarots = (reading.support_tarots || []).map((number, index) => {
+        let tarot = getTarotByNumber(number);
+        if (!tarot) tarot = tarotCards[Math.floor(Math.random() * tarotCards.length)];
+        return {
+          id: tarot.id,
+          number: tarot.number,
+          name: tarot.name,
+          image: tarot.image,
+          reason: reading.support_reasons?.[index] || 'This card supports your journey.',
+        };
+      });
+
+      const challengeTarots = (reading.challenge_tarots || []).map((number, index) => {
+        let tarot = getTarotByNumber(number);
+        if (!tarot) tarot = tarotCards[Math.floor(Math.random() * tarotCards.length)];
+        return {
+          id: tarot.id,
+          number: tarot.number,
+          name: tarot.name,
+          image: tarot.image,
+          reason: reading.challenge_reasons?.[index] || 'Be mindful of this energy.',
+        };
+      });
+
+      return {
+        main_tarot_id: mainTarot.id,
+        main_tarot_name: mainTarot.name,
+        main_tarot: mainTarot,
+        short_explanation: reading.short_explanation,
+        long_explanation: reading.long_explanation,
+        support_tarots: supportTarots,
+        challenge_tarots: challengeTarots,
+      };
+    } catch (e) {
+      lastError = e;
+      console.error(`Error with model ${modelName}:`, e.message);
+      continue;
+    }
+  }
+
+  throw lastError || new Error('Failed to get response from AI');
+}

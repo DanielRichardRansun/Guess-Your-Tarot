@@ -1,32 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { GiCardRandom } from "react-icons/gi";
 import { useTranslation } from "react-i18next";
-import api from "../api";
+import { getAllTarots } from "../data/tarotCards";
 import "./TarotLibraryPage.css";
 
 export default function TarotLibraryPage() {
-  const [tarots, setTarots] = useState([]);
+  const allTarots = getAllTarots();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [selectedTarot, setSelectedTarot] = useState(null);
-  const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
-
-  useEffect(() => {
-    fetchTarots();
-  }, []);
-
-  const fetchTarots = async () => {
-    try {
-      const res = await api.get("/tarots");
-      setTarots(res.data);
-    } catch (err) {
-      console.error("Failed to load tarots", err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const categories = [
     { key: "all", label: t("library.all_cards") },
@@ -37,7 +21,7 @@ export default function TarotLibraryPage() {
     { key: "pentacles", label: t("library.pentacles") },
   ];
 
-  const filteredTarots = tarots.filter((t) => {
+  const filteredTarots = allTarots.filter((t) => {
     const matchesSearch = t.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = category === "all" || t.category === category;
     return matchesSearch && matchesCategory;
@@ -76,44 +60,30 @@ export default function TarotLibraryPage() {
           </div>
         </div>
 
-        {loading ? (
-          <div className="library__grid">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div
-                key={i}
-                className="skeleton"
-                style={{ height: "280px", borderRadius: "12px" }}
-              ></div>
-            ))}
-          </div>
-        ) : (
-          <>
-            <p className="library__count">
-              {t("library.cards_count", { count: filteredTarots.length })}
-            </p>
-            <div className="library__grid">
-              {filteredTarots.map((tarot, i) => (
-                <div
-                  key={tarot.id}
-                  className="library__card card"
-                  style={{ animationDelay: `${Math.min(i * 0.05, 0.5)}s` }}
-                  onClick={() => setSelectedTarot(tarot)}
-                >
-                  <div className="library__card-img-wrapper">
-                    <img
-                      src={`/images/tarot/${tarot.image}`}
-                      alt={tarot.name}
-                      className="library__card-img"
-                      loading="lazy"
-                    />
-                  </div>
-                  <h3 className="library__card-name">{tarot.name}</h3>
-                  <span className="library__card-num">#{tarot.number}</span>
-                </div>
-              ))}
+        <p className="library__count">
+          {t("library.cards_count", { count: filteredTarots.length })}
+        </p>
+        <div className="library__grid">
+          {filteredTarots.map((tarot, i) => (
+            <div
+              key={tarot.id}
+              className="library__card card"
+              style={{ animationDelay: `${Math.min(i * 0.05, 0.5)}s` }}
+              onClick={() => setSelectedTarot(tarot)}
+            >
+              <div className="library__card-img-wrapper">
+                <img
+                  src={`/images/tarot/${tarot.image}`}
+                  alt={tarot.name}
+                  className="library__card-img"
+                  loading="lazy"
+                />
+              </div>
+              <h3 className="library__card-name">{tarot.name}</h3>
+              <span className="library__card-num">#{tarot.number}</span>
             </div>
-          </>
-        )}
+          ))}
+        </div>
 
         {/* Modal */}
         {selectedTarot && (
